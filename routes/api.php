@@ -4,6 +4,19 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\CompanyTravelController;
 use App\Http\Controllers\Api\admin\TravellersAdminController;
+use Illuminate\Support\Facades\Mail;
+
+Route::get('/test-mail', function () {
+    Mail::raw('Testing Laravel email from localhost.', function ($message) {
+        $message->to('seematadakhe01@gmail.com')
+                ->subject('Laravel SMTP Test');
+    });
+
+    return response()->json([
+        'status' => true,
+        'message' => 'Mail sent successfully'
+    ]);
+});
 
 
 Route::get('/hello', function () {
@@ -26,6 +39,7 @@ Route::get('/travellers-details-list', [TravellersAdminController::class, 'trave
 Route::post('/travellers-data-insert', [TravellersAdminController::class, 'insertData']);
 Route::get('/travellers-time-list', [TravellersAdminController::class, 'travellersTimeList']);
 Route::post('/filter-time-list', [CompanyTravelController::class, 'filterByCompanies']);
+Route::post('/contact-submit', [CompanyTravelController::class, 'contactSubmit']);
 
 
 

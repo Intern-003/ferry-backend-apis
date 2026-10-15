@@ -8,6 +8,8 @@ use App\Models\Seat;
 use App\Models\Companydata;
 use App\Models\Bookings;
 use App\Models\Passenger;
+use App\Mail\EnquiryMail;
+use Illuminate\Support\Facades\Mail;
 
 class CompanyTravelController extends Controller
 {
@@ -188,5 +190,40 @@ class CompanyTravelController extends Controller
             'status' => true,
             'data' => $travellers
         ]);
+    }
+     public function contactSubmit(Request $request)
+    {
+        $data = $request->validate([
+            'name'    => 'required|string|max:100',
+            'mobile'  => 'required|string|max:20',
+            'email'   => 'nullable|email|max:255',
+            'enquiry' => 'nullable|string|max:255',
+            'message' => 'required|string|max:5000',
+        ]);
+
+        try {
+          /*  Mail::to('seematadakhe01@gmail.com')
+                ->send(new EnquiryMail($data));*/
+
+            $html = view('simple', compact('data'))->render();
+
+            Mail::html($html, function ($message) {
+                $message->to('seematadakhe01@gmail.com')
+                        ->subject('Customer Enquiry');
+            });
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Enquiry submitted successfully. Email sent.'
+            ], 200);
+
+        } catch (\Throwable $e) {
+            report($e);
+
+            return response()->json([
+                'status' => false,
+                'message' => 'Unable to send enquiry email. Please try again.'
+            ], 500);
+        }
     }
 }
