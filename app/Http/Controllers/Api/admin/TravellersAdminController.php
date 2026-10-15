@@ -110,23 +110,5 @@ class TravellersAdminController extends Controller
         }
     }
 
-    public function filterByCompanies(Request $request)
-    {
-        $request->validate([
-            'company_ids' => 'required|array|min:1',
-            'company_ids.*' => 'required|integer',
-        ]);
 
-        $travellers = Ferrytour::whereIn(
-            'company_id',
-            $request->company_ids
-        )
-        ->orderBy('arrival_time')
-        ->get();
-
-        return response()->json([
-            'status' => true,
-            'data' => $travellers
-        ]);
-    }
 }

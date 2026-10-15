@@ -169,4 +169,24 @@ class CompanyTravelController extends Controller
             'token_type' => 'Bearer',
         ], 200);
     }
+
+    public function filterByCompanies(Request $request)
+    {
+        $request->validate([
+            'company_ids' => 'required|array|min:1',
+            'company_ids.*' => 'required|integer',
+        ]);
+
+        $travellers = Ferrytour::whereIn(
+            'company_id',
+            $request->company_ids
+        )
+        ->orderBy('arrival_time')
+        ->get();
+
+        return response()->json([
+            'status' => true,
+            'data' => $travellers
+        ]);
+    }
 }

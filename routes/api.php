@@ -25,7 +25,7 @@ Route::get('/booking-list', [TravellersAdminController::class, 'bookingList']);
 Route::get('/travellers-details-list', [TravellersAdminController::class, 'travellersList']);
 Route::post('/travellers-data-insert', [TravellersAdminController::class, 'insertData']);
 Route::get('/travellers-time-list', [TravellersAdminController::class, 'travellersTimeList']);
-Route::post('/filter-time-list', [TravellersAdminController::class, 'filterByCompanies']);
+Route::post('/filter-time-list', [CompanyTravelController::class, 'filterByCompanies']);
 
 
 
